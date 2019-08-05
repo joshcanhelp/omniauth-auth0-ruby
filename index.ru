@@ -4,8 +4,7 @@ require 'omniauth'
 require 'omniauth-auth0'
 require_relative 'omniauth_authenticity_checker'
 
-
-class HelloWorld
+class Application
 
   def call(env)
     req = Rack::Request.new(env)
@@ -33,8 +32,9 @@ class HelloWorld
 end
 
 handler = Rack::Handler::Thin
+
 app = Rack::Builder.new do |builder|
-  
+
   builder.use Rack::Session::Cookie, key: 'rack.session', path: '/', expire_after: 2592000, secret: 's91jd92jn01xe9h2'
 
   builder.use Rack::Protection, reaction: :drop_session, use: :authenticity_token
@@ -55,7 +55,7 @@ app = Rack::Builder.new do |builder|
     )
   end
 
-  builder.run HelloWorld.new
+  builder.run Application.new
 end
 
 handler.run app
